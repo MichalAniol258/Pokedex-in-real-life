@@ -1,0 +1,102 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Poetsen One;
+}
+
+body {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-image: url(imgs/login-bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+#headerIMG {
+    width: 0;
+}
+
+
+#pikachu {
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#buttons {
+    height: 30vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+#pikachuIMG {
+    width: 80%;
+}
+
+
+
+#sMain {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttonIMG {
+    width: 25rem;
+}
+
+
+
+@media only screen and (max-width: 768px) {
+    body {
+        width: 100%;
+        height: 100vh;
+        background-image: url(imgs/login-bg.jpg);
+        background-repeat: no-repeat;
+        background-position: top;
+        background-size: cover;
+    }
+
+    #sHeader {
+        width: 100%;
+    }
+
+    #sHeader img {
+        width: 100%;
+    }
+
+    #sMain {
+        width: 100%;
+    }
+
+    #pikachu {
+        height: 50vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #buttons {
+        height: 20vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+
+    .buttonIMG {
+        width: 20rem;
+    }
+
+    #pikachuIMG {
+        width: 80%;
+    }
+}

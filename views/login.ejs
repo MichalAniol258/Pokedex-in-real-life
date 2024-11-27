@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Pokedex - login</title>
+    <link rel="stylesheet" href="loginStyle.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <section id="sHeader">
+        <header>
+            <img src="imgs/header.svg" id="headerIMG" alt="header">
+        </header>
+    </section>
+
+    <section id="sMain">
+        <main>
+            <div id="form-container">
+
+                <form id="loginForm" action="/login" method="post">
+                    <p class="form-error" style="display: none;"></p>
+                    <% if (messages.error){ %>
+                        <p>
+                            <%= messages.error %>
+                        </p>
+                        <% } %>
+                            <input type="email " novalidate name="email" id="email" placeholder="Enter your email"><br>
+                            <span class="error email-error" style="display: none;">
+                                <p class="error-text">Please enter a valid email</p>
+                                <br>
+                            </span>
+                            <input type="password" name="password" id="pass" placeholder="Enter your password"><br>
+
+                            <a href="register.ejs">Don't have an account?</a><br>
+                            <button type="submit">Login</button>
+                </form>
+            </div>
+        </main>
+    </section>
+
+    <section id="sNav">
+        <nav>
+            <ul>
+                <li>
+                    <a href="indexFirst.html">
+                        <img src="imgs/chevron-left-svgrepo-com.svg" id="cameraIMG" alt="">
+                        Back
+                    </a>
+                </li>
+
+                <li>
+
+                </li>
+
+                <li>
+                </li>
+            </ul>
+        </nav>
+    </section>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('pass'); // Dodaj pole hasła
+        const emailError = document.querySelector('.email-error');
+        const formError = document.querySelector('.form-error'); // Błąd formularza
+
+        // Email Validation Function
+        function checkEmail() {
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!emailInput.value.match(emailPattern)) {
+                emailError.style.display = 'block';
+                return false;
+            }
+            emailError.style.display = 'none';
+            return true;
+        }
+
+        // Real-time validation
+        emailInput.addEventListener('input', checkEmail);
+
+        // Form submission
+        // Form submission
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission
+
+            const isEmailValid = checkEmail(); // Validate email
+
+            if (isEmailValid) {
+                const email = emailInput.value;
+                const password = passwordInput.value; // Get the password
+
+                try {
+                    const response = await fetch('/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ email, password }), // Send email and password
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        // Handle successful login (e.g., redirect)
+                        localStorage.setItem('jwtToken', data.token); // Save token
+                        window.location.href = '/indexMain.ejs'; // Redirect on success
+                    } else {
+                        // Handle login errors (e.g., show error message)
+                        formError.textContent = data.message || 'Login failed'; // Use message from server
+                        formError.style.display = 'block'; // Show form error
+                    }
+                } catch (error) {
+                    console.error('Error during login:', error);
+                    formError.textContent = 'An error occurred. Please try again.'; // General error message
+                    formError.style.display = 'block'; // Show form error
+                }
+            }
+        });
+
+    </script>
+
+</body>
+
+</html>

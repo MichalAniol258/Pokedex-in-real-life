@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Pokedex - register</title>
+    <link rel="stylesheet" href="loginStyle.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Sans&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <section id="sHeader">
+        <header>
+            <img src="imgs/header.svg" id="headerIMG" alt="header">
+        </header>
+    </section>
+
+    <section id="sMain">
+        <main>
+            <div id="form-container">
+                <form id="loginForm" action="/register" method="post">
+
+                    <input type="text" id="name" name="name" placeholder="Enter your name"
+                        title="Only letters and certain special characters are allowed.">
+
+                    <span class="error name-error" style="display: none;">
+                        <p class="error-text">Name must be at least 4 characters, without numbers and special
+                            character.
+                        </p>
+                        <br>
+                    </span>
+
+
+
+                    <input type="email" name="email" id="email" placeholder="Enter your email">
+                    <span class="error email-error" style="display: none;">
+                        <p class="error-text">Please enter a valid email</p>
+                        <br>
+                    </span>
+
+
+
+                    <span class="error emailExist-error" style="display: none;">
+                        <p class="error-text">This email already exists</p>
+                        <br>
+                    </span>
+
+
+                    <input type="password" id="password" name="password" placeholder="Enter your password">
+                    <span class="error password-error" style="display: none;">
+                        <p class="error-text">Password must be at least 8 characters, include uppercase,
+                            lowercase, number, and special character.</p>
+                        <br>
+                    </span>
+
+
+                    <input type="password" id="confirm-password" name="confirm-password"
+                        placeholder="Confirm your password">
+                    <span class="error confirm-password-error" style="display: none;">
+                        <p class="error-text">Passwords do not match</p>
+                        <br>
+                    </span>
+
+
+                    <a href="login.ejs">You already have an account?</a><br>
+                    <button id="wyslij">Register</button>
+                </form>
+            </div>
+        </main>
+    </section>
+    <section id="sNav">
+        <nav>
+            <ul>
+                <li>
+                    <a href="indexFirst.html">
+                        <img src="imgs/chevron-left-svgrepo-com.svg" id="cameraIMG" alt="">
+                        Back
+                    </a>
+                </li>
+
+                <li>
+
+                </li>
+
+                <li>
+                </li>
+            </ul>
+        </nav>
+    </section>
+
+
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const nameInput = document.querySelector("#name");
+        const emailInput = document.getElementById('email');
+        const passInput = document.getElementById('password');
+        const confirmPassInput = document.getElementById('confirm-password');
+
+        const emailError = document.querySelector('.email-error');
+        const nameError = document.querySelector(".name-error");
+        const passError = document.querySelector('.password-error');
+        const confirmPassError = document.querySelector('.confirm-password-error');
+
+        // Email Validation
+        // Email Validation
+        emailInput.addEventListener('input', async () => {
+            const isEmailValid = checkEmail();
+
+            if (isEmailValid) {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: emailInput.value,
+                        checkOnly: true // Wskazuje, że to jest żądanie sprawdzenia
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.emailExists) {
+                        const messageElement = document.querySelector('.emailExist-error');
+                        messageElement.style.display = 'block'; // Pokaż błąd
+                        if (data.message === 'Wysłano ponownie e-mail weryfikacyjny.') {
+                            messageElement.innerHTML = 'E-mail istnieje, nowy link weryfikacyjny został wysłany.';
+                            messageElement.classList.add('info'); // Klasa dla informacji
+                        } else if (data.message === 'E-mail już istnieje i jest zweryfikowany.') {
+                            messageElement.innerHTML = 'E-mail już istnieje i jest zweryfikowany.';
+                            messageElement.classList.add('info'); // Klasa dla sukcesu
+                        } else {
+                            messageElement.innerHTML = 'E-mail już istnieje.';
+                            messageElement.classList.add('info'); // Klasa dla błędu
+                        }
+                    } else {
+                        document.querySelector('.emailExist-error').style.display = 'none'; // Ukryj błąd
+                    }
+
+                } else {
+                    console.error('Błąd podczas walidacji e-maila:', response.statusText);
+                }
+            } else {
+                document.querySelector('.emailExist-error').style.display = 'none'; // Ukryj błąd, jeśli e-mail jest nieprawidłowy
+            }
+        });
+
+
+
+
+        function checkName() {
+            const namePattern = /^[A-Za-zÀ-ÿ '-]{4,16}$/;
+            if (!nameInput.value.match(namePattern)) {
+                nameError.style.display = 'block';
+                return false;
+            }
+            nameError.style.display = 'none';
+            return true;
+        }
+
+        function checkEmail() {
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!emailInput.value.match(emailPattern)) {
+                emailError.style.display = 'block';
+                return false;
+            }
+            emailError.style.display = 'none';
+            return true;
+        }
+
+        // Password Validation
+        function validatePassword() {
+            const passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&_])[A-Za-z\d@$!%*?&_]{8,}$/;
+
+            if (!passInput.value.match(passPattern)) {
+                passError.style.display = 'block';
+                return false;
+            }
+            passError.style.display = 'none';
+            return true;
+        }
+
+        // Confirm Password Validation
+        function confirmPassword() {
+            if (passInput.value !== confirmPassInput.value || confirmPassInput.value === "") {
+                confirmPassError.style.display = 'block';
+                return false;
+            }
+            confirmPassError.style.display = 'none';
+            return true;
+        }
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const isEmailValid = checkEmail();
+            const isNameValid = checkName();
+            const isPasswordValid = validatePassword();
+            const isConfirmPassValid = confirmPassword();
+            const emailExists = document.querySelector('.emailExist-error').style.display === 'block';
+
+            // Only submit if all validations pass and email does not exist
+            if (isEmailValid && isPasswordValid && isConfirmPassValid && isNameValid && !emailExists) {
+                form.submit(); // If all validations pass, submit the form
+            }
+        });
+
+        // Real-time validation
+        emailInput.addEventListener('keyup', checkEmail);
+        nameInput.addEventListener('keyup', checkName);
+        passInput.addEventListener('keyup', validatePassword);
+        confirmPassInput.addEventListener('keyup', confirmPassword);
+
+    </script>
+</body>
+
+</html>
