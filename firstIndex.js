@@ -20,12 +20,12 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com', // Zmień na adres swojego serwera SMTP
+    host: process.env.smtpServer, // Zmień na adres swojego serwera SMTP
     port: 465,
     secure: true, // Zmien na true, jeśli używasz portu 465
     auth: {
-        user: '', // Twój e-mail
-        pass: '' // Twoje hasło
+        user: process.env.smtpEmail, // Twój e-mail
+        pass: process.env.smtpPassword // Twoje hasło
     }
 });
 
