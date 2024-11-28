@@ -68,7 +68,8 @@
    DB_USER=your username
    DB_PASS=your password
    DB_NAME=pokedex
-   JWT_SECRET=your_jwt_secret
+   SESSION_SECRET=your_jwt_secret
+   SESSION_SECRET3=your_jwt_secret2
    host=domain or http://localhost:3000
    ```
 
