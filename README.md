@@ -69,6 +69,7 @@
    DB_PASS=password
    DB_NAME=pokedex
    JWT_SECRET=your_jwt_secret
+   host=domain or http://localhost:3000
    ```
 
 5. Run the server:
