@@ -64,9 +64,9 @@
 
 4. Configure the `.env` file with your database credentials and JWT secret:
    ```bash
-   DB_HOST=localhost
-   DB_USER=root
-   DB_PASS=password
+   DB_HOST=your address
+   DB_USER=your username
+   DB_PASS=your password
    DB_NAME=pokedex
    JWT_SECRET=your_jwt_secret
    host=domain or http://localhost:3000
