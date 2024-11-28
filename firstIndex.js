@@ -156,7 +156,7 @@ app.post("/register", checkNotAuth, async (req, res) => {
                 if (!existingUser.verified) {
                     // E-mail nie jest zweryfikowany, wyślij ponownie e-mail weryfikacyjny
                     const verificationToken = jwt.sign({ email: existingUser.email }, process.env.SESSION_SECRET3, { expiresIn: '1h' });
-                    const verificationLink = `https://pokedex-3-ctc0.onrender.com/verify-email?token=${verificationToken}`;
+                    const verificationLink = `${process.env.host}/verify-email?token=${encodeURIComponent(verificationToken)}`;
 
                     const mailOptions = {
                         from: '',
@@ -205,7 +205,8 @@ app.post("/register", checkNotAuth, async (req, res) => {
 
                 // Wygeneruj token weryfikacyjny
                 const verificationToken = jwt.sign({ email: newUser.email }, process.env.SESSION_SECRET3, { expiresIn: '1h' });
-                const verificationLink = `http://localhost:3000/verify-email?token=${verificationToken}`;
+
+const verificationLink = `${process.env.host}/verify-email?token=${encodeURIComponent(verificationToken)}`;
 
                 const mailOptions = {
                     from: '',
