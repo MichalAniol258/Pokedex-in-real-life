@@ -68,6 +68,9 @@
    DB_USER=your username
    DB_PASS=your password
    DB_NAME=pokedex
+   smtpServer= for example smtp.gmail.com
+   smtpEmail= example@gmail.com
+   smtpPassword= example
    SESSION_SECRET=your_jwt_secret
    SESSION_SECRET3=your_jwt_secret2
    host=domain or http://localhost:3000
